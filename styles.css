@@ -590,6 +590,21 @@ main{
   
   }
 
+  /* Center only native date text; preserve its box and inline padding. */
+  input[type="date"] {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  input[type="date"]::-webkit-date-and-time-value,
+  input[type="date"]::-webkit-datetime-edit {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    min-height: 100%;
+    padding: 0;
+  }
+
   #close-summary {
    width: 48px;
    flex-shrink: 0;
