@@ -1,0 +1,182 @@
+[
+  {
+    "engine": "chromium",
+    "mode": "browser-toolbar",
+    "viewport": "320x568",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "browser-toolbar",
+    "viewport": "375x667",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "browser-toolbar",
+    "viewport": "390x844",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "browser-toolbar",
+    "viewport": "393x852",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "browser-toolbar",
+    "viewport": "430x932",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "standalone-safe-area",
+    "viewport": "320x568",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "standalone-safe-area",
+    "viewport": "375x667",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "standalone-safe-area",
+    "viewport": "390x844",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "standalone-safe-area",
+    "viewport": "393x852",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "chromium",
+    "mode": "standalone-safe-area",
+    "viewport": "430x932",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "browser-toolbar",
+    "viewport": "320x568",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "browser-toolbar",
+    "viewport": "375x667",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "browser-toolbar",
+    "viewport": "390x844",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "browser-toolbar",
+    "viewport": "393x852",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "browser-toolbar",
+    "viewport": "430x932",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "standalone-safe-area",
+    "viewport": "320x568",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "standalone-safe-area",
+    "viewport": "375x667",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "standalone-safe-area",
+    "viewport": "390x844",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "standalone-safe-area",
+    "viewport": "393x852",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  },
+  {
+    "engine": "webkit",
+    "mode": "standalone-safe-area",
+    "viewport": "430x932",
+    "overflow": 0,
+    "cardBounds": "PASS",
+    "height52": "PASS",
+    "occlusion": "PASS"
+  }
+]

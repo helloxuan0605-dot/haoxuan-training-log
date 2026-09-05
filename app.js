@@ -11,7 +11,7 @@ function record(){const id=`${date}_${type}`;if(!db.records[id])db.records[id]={
 function save(){if(blocked){$('#save-status').textContent='保存不可用 · 请备份';return false}try{localStorage.setItem(KEY,JSON.stringify(db));$('#save-status').textContent='● 已自动保存';return true}catch{$('#save-status').textContent='保存失败 · 空间不足';toast('无法保存，请保留页面并复制训练反馈备份');return false}}
 function toast(t){$('#toast').textContent=t;$('#toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').style.display='none',3000)}
 function choices(path,values,current,cols=values.length){return `<div class="choices" style="--cols:${cols}">${values.map(v=>{const [value,label]=Array.isArray(v)?v:[v,v];return `<button type="button" data-choice="${path}" data-value="${esc(value)}" aria-pressed="${String(current)===String(value)}">${label}</button>`}).join('')}</div>`}
-function field(label,path,value,kind='text',extra=''){return `<label>${label}<input type="${kind}" ${kind==='time'&&!value?'class="time-empty"':''} data-field="${path}" value="${esc(value)}" ${extra}></label>`}
+function field(label,path,value,kind='text',extra=''){return `<label class="form-field">${label}<span class="input-wrap"><input type="${kind}" ${kind==='time'&&!value?'class="time-empty"':''} data-field="${path}" value="${esc(value)}" ${extra}></span></label>`}
 const feelings=[['easy','🟢 轻松'],['normal','🟡 普通'],['hard','🟠 困难'],['max','🔴 极限']],emoji={easy:'🟢',normal:'🟡',hard:'🟠',max:'🔴'};
 function stepper(label,path,value,step){return `<div><label>${label}</label><div class="stepper"><button data-step="${path}" data-delta="-${step}" aria-label="减少${label}">−</button><input aria-label="${label}" data-field="${path}" type="number" inputmode="${step===1?'numeric':'decimal'}" min="0" max="${step===1?999:2000}" step="${step===1?1:0.01}" value="${esc(value)}"><button data-step="${path}" data-delta="${step}" aria-label="增加${label}">+</button></div></div>`}
 function updateProgress(){if(view!=='training')return;const r=record(),all=r.exercises.flatMap(e=>e.sets),n=all.filter(s=>s.done).length;$('#progress-text').textContent=`${n} / ${all.length} 组 · ${r.exercises.filter(e=>e.done).length} / ${r.exercises.length} 动作`;$('#progress').value=n;$('#progress').max=all.length||1;$('#finish').disabled=!r.exercises.length||!r.exercises.every(e=>e.done);$('#finish').textContent=r.completed?'✓ 训练已完成':'结束训练并保存'}
@@ -37,3 +37,19 @@ $('#copy').onclick=async()=>{const text=$('#summary').value;try{if(!navigator.cl
 window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue){try{const next=JSON.parse(e.newValue);if(next.version===1){db=next;render();if(view==='training')refreshPain();toast('已同步其他窗口的记录')}}catch{}}});
 render();refreshPain();
 if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>toast('离线缓存未就绪，请联网后刷新重试'));
+
+// Layout only: includes the safe-area padding already present in the nav.
+const bottomNav = document.querySelector('nav');
+function syncNavigationHeight() {
+  document.documentElement.style.setProperty('--bottom-nav-height', `${Math.ceil(bottomNav.getBoundingClientRect().height)}px`);
+}
+syncNavigationHeight();
+new ResizeObserver(syncNavigationHeight).observe(bottomNav);
+window.addEventListener('resize', syncNavigationHeight);
+window.visualViewport?.addEventListener('resize', () => {
+  syncNavigationHeight();
+  const focused = document.activeElement;
+  if (focused?.matches('main input, main textarea, main select')) {
+    requestAnimationFrame(() => focused.scrollIntoView({block: 'nearest'}));
+  }
+});

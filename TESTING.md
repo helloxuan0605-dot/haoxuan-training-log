@@ -35,3 +35,33 @@
 - 空时间框增加仅手机端的 WebKit 显示修正，不更改值或存储；聚焦时保留原生编辑器。
 - manifest、index.html、图标保持不变；Service Worker 仅把缓存版本升级至 v2，不清除 localStorage。
 - 测试期间无页面 JavaScript 异常。真实 iPhone/PWA 原生时间选择器、系统键盘、安全区与新版安装缓存仍需用户在设备上确认，本轮没有实际控制 iPhone。
+
+## Root-cause layout regression — shell v3
+
+This section supersedes the earlier test that checked only document scrollWidth. Detailed evidence: `LAYOUT-AUDIT.md`.
+
+Run with Playwright installed and a static server serving the project:
+
+```sh
+TEST_URL=http://localhost:8000 node tests/layout.cjs
+```
+
+Use NODE_PATH if Playwright is installed outside this folder. No dependency or test code is loaded by the PWA. `RESULT_PATH=tests/layout-results.json` optionally saves the JSON report; `SCREENSHOT_DIR` optionally saves screenshots.
+
+The scan inspects all rendered elements, including opened exercise contents. Only non-rendered nodes are ignored; no intentional decorative overflow exclusions are used. html/body clipping is explicitly disabled during tests. Every input/textarea/select is separately checked against its parent card's content bounds (border and padding removed), with 1px tolerance. Labels and controls are checked for spacing; phone inputs must be 52px high.
+
+| Viewport | Unintended overflow | Card content bounds / 52px | Navigation targets |
+|---|---:|---|---|
+| 320×568 | 0 | PASS | PASS |
+| 375×667 | 0 | PASS | PASS |
+| 390×844 | 0 | PASS | PASS |
+| 393×852 | 0 | PASS | PASS |
+| 430×932 | 0 | PASS | PASS |
+
+Each row ran in both Chromium and WebKit, in two geometry configurations: a viewport reduced by 80px to model browser toolbar space, and added 34px bottom navigation padding to model standalone safe area. 20 combinations passed. These are simulations, not actual iOS browser or standalone execution.
+
+Navigation assertions call native scrollIntoView(block:end), then require bottom <= nav.top − 8px for: first set header, first set completion, last exercise's last set completion, last exercise completion, finish-training button, last sleep textarea, last history item. Fixed navigation is not disabled.
+
+Existing full functional tests passed again, including old localStorage data loading, exact summary compatibility, history, clipboard and Chromium offline reload. No page JavaScript errors. Desktop/tablet 768/1024/1440 comparisons check card/control geometry within 1px (WebKit textarea baseline rounding differs by 0.203px) and screenshot tolerance below 0.01% after normalizing ephemeral save status/focus.
+
+Physical-device checks still pending: actual Safari address-bar animation, actual standalone display mode and safe-area values, native iPhone date/time picker rendering, keyboard interaction. Desktop WebKit did not reproduce the reported pre-fix physical-device input overflow; see audit for the distinction between observed defects and defensive intrinsic-size corrections.

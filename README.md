@@ -81,3 +81,9 @@ localStorage 键名为 `haoxuan-training-log:v1`，保存模板、训练历史�
 5. 若仍是旧界面，在 Safari 打开同一网址刷新，等待后再次执行关闭全部窗口和重开步骤。无需重新安装或修改网址。
 
 不要使用“清除网站数据”强制更新，那会删除 localStorage 中的训练记录。不要删除主屏幕 App 作为刷新方式。Safari 与主屏幕 App 可能使用不同存储空间，应以原来保存训练的入口为准。
+
+## 尺寸根因修复（shell v3）
+
+当前缓存为 `haoxuan-shell-v3`。本版统一控件尺寸规则、增加原生时间/日期输入的宽度隔离容器，并根据底部导航实测高度设置正文与滚动预留。完整审计见 `LAYOUT-AUDIT.md`，可重复运行的边界/遮挡测试见 `tests/layout.cjs`。
+
+发布时更新 `index.html`、`styles.css`、`app.js`、`sw.js`。保持联网打开原主屏幕 App 等待更新下载，然后关闭此站点全部 Safari 标签页并划掉 PWA，再重新打开，使等待中的 v3 Service Worker 激活。不要清除网站数据或卸载 PWA；localStorage v1 保持不变。
