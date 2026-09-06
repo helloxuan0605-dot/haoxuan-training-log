@@ -4,6 +4,54 @@ const B=[['高位下拉','ラットプルダウン','Lat Pulldown',47.5,3,'8–1
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 let db={version:1,templates:{A:[],B,C:[],D:[]},records:{},sleep:{},gym:'Anytime成增'},blocked=false;
 try{const raw=localStorage.getItem(KEY);if(raw){const x=JSON.parse(raw);if(x.version!==1||!x.records||!x.sleep||!x.templates||!['A','B','C','D'].every(t=>Array.isArray(x.templates[t])))throw Error();db=x}}catch{blocked=true}
+// One-time dated plan; the v1 record/template schema stays unchanged.
+const C_PLAN_DATE = '2026-09-06';
+const C_PLAN_KEY = `${C_PLAN_DATE}_C`;
+const C_PLAN_MARKER = 'haoxuan-training-log:plan:2026-09-06-C';
+const C_PLAN = [
+  ['腿举','レッグプレス','Leg Press',42.5,3,'8–12'],
+  ['坐姿腿弯举','レッグカール','Leg Curl',45,3,'10–15'],
+  ['腿屈伸','レッグエクステンション','Leg Extension',60,2,'10–15'],
+  ['髋外展','ヒップアブダクション','Hip Abduction',55,2,'15–20'],
+  ['髋内收','ヒップアダクション','Hip Adduction',32.5,2,'12–20'],
+  ['器械卷腹','アブドミナル','Abdominal',37.5,3,'10–15']
+].map(([cn,ja,en,weight,count,range])=>({cn,ja,en,weight,count,range}));
+const C_PLAN_NOTES = `【今日计划｜腿＋臀＋腹】
+全部按机器显示重量记录。以上为建议起始/参考重量，每组可独立调整；成増机器阻力可能与豊玉桜台不同。
+腿举：先轻重量15次、稍重10次热身；正式组3组，最后一组约RIR1–2。阻力不同可首组调整，不强行使用42.5kg。休息约120秒。
+坐姿腿弯举：臀部贴座，脚跟向后下方拉，动作标准优先。
+腿屈伸：60kg为技术审核重量，不自动恢复65kg；膝关节对准转轴、臀部贴座、不甩动，下降约2–3秒。
+髋外展：骨盆稳定，用臀部外侧打开双腿，不摆动身体。没有55kg时用最接近的下一档。
+髋内收：不强求最大幅度，腹股沟无不适，回程受控。没有32.5kg时用最接近档位。
+器械卷腹：呼气时肋骨卷向骨盆，不用手臂拉动。档位不同则以10–15次且最后约RIR1–2为准。
+其他动作休息60–90秒。最后一组通常保留RIR1–2，首次适应成増机器允许RIR2–3。`;
+function cPlanHasInput(r) {
+  if (!r || r.date !== C_PLAN_DATE || r.type !== 'C' || r.updated || r.completed ||
+      !Array.isArray(r.exercises) || !r.feedback) return true;
+  if (Object.values(r.feedback).some(v=>Array.isArray(v)?v.length:v!==''&&v!==null&&v!==undefined)) return true;
+  return r.exercises.some(e=>e.done || !Array.isArray(e.sets) || e.sets.length!==e.count || e.sets.some(s=>
+    s.done || s.reps!=='' || s.feel!=='' || s.rir!=='' || String(s.weight)!==String(e.weight)));
+}
+function injectCPlan() {
+  if (blocked) return 'blocked';
+  try {
+    const applied=localStorage.getItem(C_PLAN_MARKER);
+    if (applied) return applied==='conflict-preserved'?'conflict':'already-applied';
+    const r=db.records[C_PLAN_KEY];
+    const conflict=!!r && cPlanHasInput(r);
+    // Build separately so a failed write does not silently mutate the loaded data.
+    const next={...db,templates:{...db.templates,C:C_PLAN.map(e=>({...e}))},records:{...db.records}};
+    if (!conflict) next.records[C_PLAN_KEY]={date:C_PLAN_DATE,type:'C',gym:'Anytime成増',
+      exercises:C_PLAN.map(e=>({...e,done:false,sets:Array.from({length:e.count},()=>({weight:e.weight,reps:'',feel:'',rir:'',done:false}))})),
+      feedback:{notes:C_PLAN_NOTES},completed:false};
+    localStorage.setItem(KEY,JSON.stringify(next));
+    db=next;
+    localStorage.setItem(C_PLAN_MARKER,conflict?'conflict-preserved':'applied');
+    return conflict?'conflict':r?'updated-empty':'created';
+  } catch { return 'save-failed'; }
+}
+const cPlanResult=injectCPlan();
+
 let date=today(),type='B',view='training';
 const existing=Object.values(db.records).filter(r=>r.date===date).sort((a,b)=>(b.updated||0)-(a.updated||0));if(existing[0])type=existing[0].type;
 const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -36,6 +84,11 @@ $('#close-summary').onclick=()=>$('#summary-dialog').close();
 $('#copy').onclick=async()=>{const text=$('#summary').value;try{if(!navigator.clipboard?.writeText)throw Error();await navigator.clipboard.writeText(text);$('#copy-status').textContent='✓ 已复制，可以粘贴到 ChatGPT'}catch{const area=$('#summary');area.focus();area.select();area.setSelectionRange(0,area.value.length);let copied=false;try{copied=document.execCommand('copy')}catch{}$('#copy-status').textContent=copied?'✓ 已复制，可以粘贴到 ChatGPT':'请长按上方已选文本，选择“复制”。'}};
 window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue){try{const next=JSON.parse(e.newValue);if(next.version===1){db=next;render();if(view==='training')refreshPain();toast('已同步其他窗口的记录')}}catch{}}});
 render();refreshPain();
+if(cPlanResult==='conflict') {
+  toast('2026-09-06 C 日已有输入，已保留原记录；仅更新未来 C 日模板。');
+  console.info('C plan conflict: existing 2026-09-06 C record preserved.');
+}
+if(cPlanResult==='save-failed') toast('C 日计划保存失败，请保留现有数据并重试。');
 if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>toast('离线缓存未就绪，请联网后刷新重试'));
 
 // Layout only: includes the safe-area padding already present in the nav.
