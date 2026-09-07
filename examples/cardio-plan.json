@@ -1,0 +1,33 @@
+{
+  "schema": "haoxuan-training-plan",
+  "version": 1,
+  "date": "2026-09-09",
+  "type": "D",
+  "kind": "cardio",
+  "gym": "Anytime豊玉桜台",
+  "title": "有氧（格式示例）",
+  "cardioOptions": [{
+    "id": "treadmill",
+    "nameZh": "跑步机坡度快走",
+    "nameJa": "トレッドミル傾斜ウォーキング",
+    "nameEn": "Incline Treadmill Walk",
+    "durationMin": 45,
+    "inclineMin": 10,
+    "inclineMax": 12,
+    "speedMin": 4.8,
+    "speedMax": 5.2,
+    "targetRpeMin": 6,
+    "targetRpeMax": 7,
+    "instructions": "不扶扶手。"
+  }, {
+    "id": "bike",
+    "nameZh": "健身车",
+    "nameJa": "バイク",
+    "nameEn": "Bike",
+    "durationMin": 35,
+    "resistance": "轻到中等",
+    "targetRpeMin": 5,
+    "targetRpeMax": 6,
+    "instructions": "保持稳定呼吸。"
+  }]
+}

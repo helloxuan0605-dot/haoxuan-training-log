@@ -1,0 +1,23 @@
+{
+  "schema": "haoxuan-training-plan",
+  "version": 1,
+  "date": "2026-09-08",
+  "type": "A",
+  "kind": "strength",
+  "gym": "Anytime豊玉桜台",
+  "title": "胸・肩・三頭（格式示例）",
+  "notes": "这是导入格式示例，请按自己的计划修改。",
+  "exercises": [{
+    "nameZh": "坐姿推胸",
+    "nameJa": "チェストプレス",
+    "nameEn": "Chest Press",
+    "weight": 40,
+    "weightUnit": "kg",
+    "weightMode": "machine",
+    "sets": 3,
+    "repMin": 8,
+    "repMax": 12,
+    "restSeconds": 120,
+    "instructions": "肩胛稳定，不耸肩。"
+  }]
+}

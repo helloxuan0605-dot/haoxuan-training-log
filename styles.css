@@ -634,3 +634,18 @@ main{
 
 }
 
+
+/* v0.2: scoped import sheet; existing mobile control geometry is retained. */
+#import-dialog { padding: 0; margin: 0 auto; overflow: hidden; }
+#import-dialog[open] { display: flex; flex-direction: column; }
+.import-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px; flex-shrink:0; border-bottom:1px solid var(--line); }
+.import-header h2 { min-width:0; }
+#cancel-import { flex-shrink:0; }
+#import-scroll { overflow:auto; overscroll-behavior:contain; min-height:0; padding:16px; }
+#plan-json { min-height:220px; max-height:45dvh; }
+#import-preview-content { overflow-wrap:anywhere; }
+#import-error { color:#9b3028; overflow-wrap:anywhere; }
+#import-error:empty { display:none; }
+.sleep-fields > h2 { margin-bottom:18px; }
+
+.imported-plan, .imported-instructions, .exercise .names { overflow-wrap: anywhere; }
