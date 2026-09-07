@@ -1,4 +1,4 @@
-# Haoxuan Training Log v0.2.1
+# Haoxuan Training Log v0.2.2
 
 原生 HTML / CSS / JavaScript，移动端优先的本地 PWA。无服务器后端、数据库、账号、AI 推断或外部请求。Workout 与 Daily Status 独立；训练计划通过本地 JSON 解析、预览、确认导入。
 
@@ -174,7 +174,7 @@ Safari 打开 HTTPS 网站 → 分享 → 添加到主屏幕。首次联网缓�
 
 ## PWA 更新和数据边界
 
-当前 CACHE：**haoxuan-shell-v8**。发布本目录完整应用文件，必须包含 storage-compat.js、data-recovery.js 和 examples 两个 JSON。缓存包含全部应用脚本和两个示例；tests/README 不加入运行缓存。
+当前 CACHE：**haoxuan-shell-v9**。发布本目录完整应用文件，必须包含 storage-compat.js、data-recovery.js 和 examples 两个 JSON。缓存包含全部应用脚本和两个示例；tests/README 不加入运行缓存。
 
 保持联网打开原来的 Safari/PWA 入口等待下载，再关闭该站点所有 Safari 标签页并划掉主屏幕 App，然后重开，使新 Worker 激活。不要清除网站数据，不要删除 PWA。manifest 和图标不变。
 
@@ -220,3 +220,14 @@ TEST_URL=http://localhost:8000 node tests/run.cjs
 导入弹窗提供“载入力量示例 / 载入有氧示例”，只填文本，不自动解析/导入。继续点击解析计划查看预览，再确认。两个 examples 文件本身都是严格、无BOM的UTF-8 JSON，格式schema仍为 haoxuan-training-plan / version 1。错误JSON显示可取得的position或行列信息；没有位置时提示复制完整JSON，不记录全文日志。
 
 导入入口独立留白，弹窗上限90dvh，固定关闭区与内部滚动区域配合可视视口；示例按钮、摘要卡、动作预览和确认区分别留出间距。现有训练/每日状态控件几何和manifest保持不变。
+
+
+## v0.2.2：顶部与空状态 UI 修复
+
+本轮不修改存储、迁移、模板、历史选择器、导入/备份或摘要逻辑。完整 UI 审计与测试见 [UI-AUDIT-v022.md](UI-AUDIT-v022.md)。
+
+- 页面顶部通过 body 的 `padding-top: env(safe-area-inset-top, 0px)` 在文档流留白，无顶部 fixed overlay。
+- 唯一的应用 blur 原在底部 nav，源码/自动测量未发现顶部滤镜层。为排除固定滤镜的 WebKit 合成干扰，底部导航改为不透明白色，去掉 backdrop-filter；位置、按钮、底部安全区保持不变，CSS 限定到 .bottom-nav。
+- 空状态保持原 card 边框、圆角、padding、字号，显式使用纵向 flex 居中；标题/说明均满宽居中、无缩进。修复前桌面引擎的几何中心本就正确，不能声称复现了实机光学偏移。
+
+**顶部 blur 的真实 iPhone 视觉效果仍需实机确认。** 请在相同主屏幕 PWA 入口联网载入新版后，关闭该站点所有窗口再重开，让 v9 Worker 激活；不需要卸载、重装或清除网站数据。

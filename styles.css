@@ -13,6 +13,9 @@ html,body{
   max-width:100%;
   margin:0;
   overflow-x:clip}
+/* Keep status-bar clearance in normal flow; never cover the page with a layer. */
+body{
+  padding-top:env(safe-area-inset-top,0px)}
 html{
   scroll-padding-bottom:calc(var(--bottom-nav-height,72px) + 24px)}
 .app-container{
@@ -21,7 +24,7 @@ html{
   margin-inline:auto}
 .input-wrap{
   display:contents}
-.grid2 > *, .row > *, .brand > *, nav > *, .choices > *, .stepper > *, .panel > *, .exercise > *, form, fieldset, label, .names{
+.grid2 > *, .row > *, .brand > *, .bottom-nav > *, .choices > *, .stepper > *, .panel > *, .exercise > *, form, fieldset, label, .names{
   min-width:0}
 fieldset{
   margin:0;
@@ -281,7 +284,7 @@ progress::-moz-progress-bar{
   white-space:nowrap}
 .history-item .muted{
   margin:6px 0 0}
-nav{
+.bottom-nav{
   position:fixed;
   bottom:0;
   left:0;
@@ -290,11 +293,11 @@ nav{
   justify-content:center;
   gap:10px;
   border-top:1px solid var(--line);
-  background:#fffffff5;
-  backdrop-filter:blur(12px);
+  /* Opaque paint avoids a fixed backdrop-filter compositor layer on iOS. */
+  background:#fff;
   padding:8px 16px calc(8px + env(safe-area-inset-bottom));
   z-index:5}
-nav button{
+.bottom-nav button{
   border:0;
   background:transparent;
   flex:1;
@@ -303,11 +306,11 @@ nav button{
   padding:4px;
   min-height:55px;
   color:#738179}
-nav button span{
+.bottom-nav button span{
   display:block;
   font-size:12px;
   margin-top:3px}
-nav button.active{
+.bottom-nav button.active{
   color:var(--green);
   background:#eef3e9}
 #toast{
@@ -337,7 +340,19 @@ dialog::backdrop{
   margin-top:8px}
 .empty{
   padding:28px 4px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
   text-align:center}
+.empty > *{
+  margin-inline:auto}
+.empty > h3, .empty > p{
+  width:100%;
+  text-align:center;
+  text-indent:0;
+  letter-spacing:normal}
 .link{
   color:var(--green)}
 /* Preserve the desktop textarea baseline spacing after block normalization. */

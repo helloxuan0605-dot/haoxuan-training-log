@@ -1,3 +1,13 @@
+# v0.2.2 UI 验证记录（2026-09-07）
+
+当前 CACHE：**haoxuan-shell-v9**。本轮运行 `tests/v022.cjs` 与更新缓存期望值的 `tests/pwa-v021.cjs`，全部通过；数据实现未改，未重复运行整套迁移/导入测试。完整审计、五种 viewport 数值、安全区模拟和实机边界见 [UI-AUDIT-v022.md](UI-AUDIT-v022.md)。
+
+新增 `tests/v022.cjs`、`tests/fixtures/v021-empty-geometry.json`、`tests/fixtures/v021-data-hashes.json`；测试入口加入v022。两引擎五种宽度：0意外横向overflow、0应用滤镜层、空状态标题/说明中心偏差0px，卡片尺寸和padding与v0.2.1基线一致。诊断fixture统计及完整storage原文不变，数据脚本/manifest/examples哈希一致。无JS异常。v9离线缓存通过。
+
+顶部 blur 的真实 iPhone 视觉效果仍需实机确认。以下为历史版本测试记录。
+
+---
+
 # v0.2.1 验证记录（2026-09-07）
 
 运行：在项目目录启动静态服务器，再执行 `TEST_URL=http://localhost:8000 node tests/run.cjs`。依赖 Playwright 和已安装的 Chromium/WebKit；外部模块可通过 NODE_PATH 指定。测试全部使用隔离浏览器存储，没有读取或改写真实 iPhone 数据。

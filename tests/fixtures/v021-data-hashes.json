@@ -1,0 +1,11 @@
+{
+  "app.js": "fcb3ce2749a37758e8e80cf261d314c189e8dc67dd884423084d301673195de6",
+  "cardio.js": "c387e849d6eb053def0cd855d0d74d7fc5415d830675e65a578e24d2a4c91fc2",
+  "daily-status.js": "1c796292828d82613358567a3f3b72a0fc2b311cbf8492f81ae2078502f4f2fd",
+  "storage-compat.js": "0da341ae26f31470f592acb5ddb8deb5d0939646bba6dd871e2751d12b4032a7",
+  "data-recovery.js": "c36ca7fe946bbdee8b1399f5163d476e997f25bfe21a8d38748433ac58f32b6c",
+  "plan-import.js": "ef2cecfae84bf2eb8e5b4f6c79ca0397913dcdd52c104e9abe45eed81c23eabb",
+  "manifest.webmanifest": "0d73dbbe1477f0d759edf789d386f9e644970ea7a781549ab04fc4b76d518208",
+  "examples/strength-plan.json": "3cf3a7bf6c58c617931334cd56c5d4938e1fc5f19692b2e71877423b6fc0a392",
+  "examples/cardio-plan.json": "019aac9ea8a3b37611be227aa625e54f19a7daefcecc843ef3cacd0bdf2bb15d"
+}

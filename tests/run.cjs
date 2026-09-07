@@ -1,2 +1,2 @@
 const {spawnSync}=require('node:child_process');const path=require('node:path');
-for(const test of ['v021.cjs','v02.cjs','strength-regression.cjs','pwa-v021.cjs']){const result=spawnSync(process.execPath,[path.join(__dirname,test)],{stdio:'inherit',env:process.env});if(result.error)throw result.error;if(result.status!==0)process.exit(result.status||1)}
+for(const test of ['v022.cjs','v021.cjs','v02.cjs','strength-regression.cjs','pwa-v021.cjs']){const result=spawnSync(process.execPath,[path.join(__dirname,test)],{stdio:'inherit',env:process.env});if(result.error)throw result.error;if(result.status!==0)process.exit(result.status||1)}
