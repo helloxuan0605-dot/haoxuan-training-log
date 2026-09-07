@@ -649,3 +649,37 @@ main{
 .sleep-fields > h2 { margin-bottom:18px; }
 
 .imported-plan, .imported-instructions, .exercise .names { overflow-wrap: anywhere; }
+
+/* v0.2.1: scope spacing to import/recovery; existing workout geometry stays intact. */
+.import-entry { margin-block:32px 24px; }
+.import-entry button, #parse-import { min-height:52px; }
+#import-dialog, .recovery-dialog { max-height:90dvh; }
+#import-scroll, .recovery-scroll { padding-bottom:calc(24px + env(safe-area-inset-bottom)); }
+#import-editor > label { margin:8px 0 16px; line-height:1.5; }
+#plan-json { min-height:220px; padding:16px; line-height:1.5; font-size:16px; margin:0; }
+.example-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:16px; }
+.example-actions button { min-width:0; min-height:44px; margin:0; }
+#parse-import { margin-top:24px; }
+#import-preview { padding-top:24px; border-top:1px solid var(--line); }
+.preview-summary { margin-bottom:24px; }
+.preview-exercises { display:grid; gap:16px; }
+.preview-exercise { margin:0; }
+.preview-exercise > p { margin:8px 0; }
+.preview-detail { margin-top:16px; }
+.preview-detail p { margin:6px 0 0; }
+.preview-actions { display:grid; gap:12px; margin-top:24px; }
+.preview-actions button { min-height:48px; margin:0; }
+.recovery-dialog { padding:0; margin:0 auto; overflow:hidden; }
+.recovery-dialog[open] { display:flex; flex-direction:column; }
+.recovery-scroll { overflow:auto; overscroll-behavior:contain; min-height:0; padding:16px 16px calc(24px + env(safe-area-inset-bottom)); }
+.recovery-scroll textarea { min-height:220px; font-size:16px; line-height:1.5; overflow-wrap:anywhere; white-space:pre-wrap; }
+.recovery-dialog .import-header button { flex-shrink:0; min-height:44px; }
+.diagnostics, .recovery-notice, .recovery-scroll, .preview-exercise { overflow-wrap:anywhere; }
+.diagnostics dt { color:var(--muted); margin-top:16px; }
+.diagnostics dd { margin:6px 0 0; }
+#backup-error { color:#9b3028; }
+#backup-error:empty { display:none; }
+@media (max-width:360px) {
+ .example-actions { grid-template-columns:minmax(0,1fr); }
+ #plan-json { min-height:180px; }
+}

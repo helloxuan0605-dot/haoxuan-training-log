@@ -1,4 +1,42 @@
-# v0.2 验证记录（当前版本）
+# v0.2.1 验证记录（2026-09-07）
+
+运行：在项目目录启动静态服务器，再执行 `TEST_URL=http://localhost:8000 node tests/run.cjs`。依赖 Playwright 和已安装的 Chromium/WebKit；外部模块可通过 NODE_PATH 指定。测试全部使用隔离浏览器存储，没有读取或改写真实 iPhone 数据。
+
+## 本轮全部通过
+
+- 新增 `tests/v021.cjs`：真实风格旧 B、六动作 C、D 同时出现在历史；替代 ID/history 容器与 canonical 空 C 共存时返回实际 C，摘要实际重量/reps/RIR0/体感/完成状态正确。只读浏览前后原 records/history/sleep 字符串内容不改写。
+- 旧 sleep 完整映射；目标仅有 date 时补齐；目标部分空时补齐；新 afternoonFocus 保留；重复迁移/刷新完全不变。数组 records、缺少非必要 root 字段、未识别条目、损坏JSON的保护和原文导出。
+- 两个 examples 原始 JSON.parse 均成功且本轮未改文件内容；示例按钮仅填文本。普通JSON、BOM、json/其他语言标签的外层围栏可解析预览；非JSON、尾逗号、缺括号、schema/version/date/数字错误拒绝，storage 前后完全相同。
+- 备份导出完整对象、无写入；Chromium 实际剪贴板逐字匹配。空隔离环境预览无写入、确认后恢复3条完成历史与Daily Status及模板；双方实际数据冲突禁覆；本机实际记录胜过导入空计划；导入实际记录胜过本机空计划。
+- browser/standalone 环境分支通过 navigator.standalone 模拟识别；这不是实际 iPhone 安装模式验收。
+- `tests/v02.cjs` 继续通过，预览总组数断言更新为新的展示文案；独立日期/摘要、A/B/C/D导入、建议/实际分离、空计划确认、真实数据与并发冲突保护、非法输入不写存储、训练摘要无睡眠。
+- `tests/strength-regression.cjs` 原样通过：完整 B 日12组、保存/恢复、完成门槛、独立重量、疼痛多选、历史、A模板、每日状态、反馈/剪贴板。
+- 新增 `tests/pwa-v021.cjs`：CACHE v8 与新增脚本/两个示例资源真实缓存；Chromium 断网刷新与离线示例预览成功；纯浏览不创建 phantom storage。
+- Chromium 和 WebKit 全流程无 pageerror；所有 production JS 语法检查通过；manifest、cardio.js 与两个examples相对v0.2逐字节一致。
+
+## 手机几何测试结果
+
+| Viewport | Chromium | WebKit |
+|---|---|---|
+| 320 × 568 | 0 unintended overflow | 0 unintended overflow |
+| 375 × 667 | 0 unintended overflow | 0 unintended overflow |
+| 390 × 844 | 0 unintended overflow | 0 unintended overflow |
+| 393 × 852 | 0 unintended overflow | 0 unintended overflow |
+| 430 × 932 | 0 unintended overflow | 0 unintended overflow |
+
+扫描关闭 html/body 横向裁切后遍历可见DOM，涵盖训练/每日状态/历史/诊断/导入编辑与预览/备份弹窗。关闭的dialog不参与可见几何扫描；没有豁免可见溢出元素。
+
+五种尺寸均验证：睡眠input在card content左右边界内（1px容差）且高度52px；页面最后控件可滚至fixed nav上方至少8px；导入预览可内部滚动，确认按钮可滚入可视区且至少48px；textarea与预览卡不超出视口。390×320模拟键盘压缩空间，取消按钮仍在可视区。1280×900桌面三页没有溢出，既有训练和状态公共CSS未修改。390px Chromium/WebKit导入预览截图已人工检查。
+
+## 验证边界
+
+没有直接连接真实 iPhone；Safari地址栏、安全区、系统键盘、设备重启及实际PWA安装仍需实机确认。桌面WebKit的移动尺寸不等于真实设备。无法确认自动恢复，需要通过数据诊断或备份恢复。不能从模拟fixture推断真实9/5、9/6、9/7记录已找回。
+
+当前 CACHE **haoxuan-shell-v8**，localStorage key保持 **haoxuan-training-log:v1**，内部version仍为1。下面保留历史测试记录，旧行为以对应版本为准。
+
+---
+
+# v0.2 验证记录（历史）
 
 运行当前测试：`TEST_URL=http://localhost:8000 node tests/run.cjs`。需要已安装的 Playwright、Chromium、WebKit（外部安装可设 NODE_PATH）。测试使用隔离存储；不会操作真实 iPhone 数据。
 

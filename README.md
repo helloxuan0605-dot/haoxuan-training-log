@@ -1,4 +1,4 @@
-# Haoxuan Training Log v0.2
+# Haoxuan Training Log v0.2.1
 
 原生 HTML / CSS / JavaScript，移动端优先的本地 PWA。无服务器后端、数据库、账号、AI 推断或外部请求。Workout 与 Daily Status 独立；训练计划通过本地 JSON 解析、预览、确认导入。
 
@@ -10,7 +10,7 @@ ChatGPT 根据今日状态、最近训练反馈及 A→B→C→D 循环生成明
 
 第二天：今日训练 → 导入今日计划 → 粘贴 JSON → 解析计划 → 查看预览 → 确认导入 → 训练 → 生成独立训练反馈 → 复制给 ChatGPT。
 
-每个日期＋训练类型最多一条 Workout；同一天不同类型可独立保存。历史列表仅显示 Workout，每日状态用自己的日期选择器回看。
+每个日期＋训练类型通过兼容选择器显示一条 Workout（旧原始重复记录保留，实际数据优先）；同一天不同类型可独立保存。历史列表仅显示 Workout，每日状态用自己的日期选择器回看。
 
 ## 本地启动与 GitHub Pages
 
@@ -37,7 +37,7 @@ Safari 打开 HTTPS 网站 → 分享 → 添加到主屏幕。首次联网缓�
 
 旧 sleep 实际为顶层 `sleep[date]`，不是 Workout 内字段。已核对源代码，没有独立 recovery 集合。旧键：bed / asleep / wakes / wake / hours / nap / caffeine / rating0…rating5 / notes。旧版共用了训练日期，并在力量摘要尾部追加 sleep，这两处在 v0.2 均已解耦。
 
-启动时复制缺失日期到 `dailyStatusByDate`，日期原样保留；旧 `sleep` 不删除、不修改。目标日期已存在时，即使新记录只填了一部分，也不会被旧值覆盖。按日期是否存在判断，重复打开不会重复迁移。迁移只扩展状态集合，不改 records/templates；以前硬编码的9/6、9/7计划注入已退出启动流程。
+启动时从旧 sleep 逐字段补齐 dailyStatusByDate。日期已有但字段缺失也会补齐；null/undefined/空字符串视为缺失，已有新值（包括0）保留。旧 sleep 和 Workout 原文不修改，重复迁移结果一致。没有 storage 时仅浏览页面不创建空存储。完整来源和限制见 [STORAGE-AUDIT.md](STORAGE-AUDIT.md)。
 
 ### Daily Status schema
 
@@ -72,7 +72,7 @@ Safari 打开 HTTPS 网站 → 分享 → 添加到主屏幕。首次联网缓�
 
 ## 正式 Plan Import schema：haoxuan-training-plan / version 1
 
-只接受原始 JSON，不接受自然语言、Markdown代码围栏、eval 或可执行代码。解析使用 JSON.parse；未知字段、未知版本和字段类型错误都会拒绝。解析/预览不写入存储，确认前可返回修改或取消。
+只接受 JSON；解析前仅 trim、去开头 BOM、移除完整最外层 Markdown 代码围栏，不修改正文，不修补错误 JSON，不执行内容。仍使用 JSON.parse；未知字段、未知版本和字段类型错误都会拒绝。解析/预览不写入存储，确认前可返回修改或取消。
 
 ### 公共字段
 
@@ -170,15 +170,15 @@ Safari 打开 HTTPS 网站 → 分享 → 添加到主屏幕。首次联网缓�
 - 旧记录无法明确判断是否为空时，保守阻止覆盖（包括旧备注）。不猜测、不合并。
 - 预览后其他窗口改变目标：确认时重新检查，并要求返回重新解析；新出现的实际数据绝不覆盖。其他日期和每日状态从最新存储保留。
 
-验证失败、取消、预览、冲突不会写存储。写入失败不清除原存储。App没有合并或删除真实记录的功能。
+验证失败、取消、预览、冲突不会写存储。写入失败不清除原存储。计划导入不合并或删除真实记录；备份导入另走预览后补缺合并流程。
 
 ## PWA 更新和数据边界
 
-当前 CACHE：**haoxuan-shell-v7**。发布需更新 index.html/app.js/cardio.js/styles.css/sw.js，并包含新增 daily-status.js、plan-import.js。缓存包含全部应用脚本；examples/tests/README 不属于运行所需缓存。
+当前 CACHE：**haoxuan-shell-v8**。发布本目录完整应用文件，必须包含 storage-compat.js、data-recovery.js 和 examples 两个 JSON。缓存包含全部应用脚本和两个示例；tests/README 不加入运行缓存。
 
 保持联网打开原来的 Safari/PWA 入口等待下载，再关闭该站点所有 Safari 标签页并划掉主屏幕 App，然后重开，使新 Worker 激活。不要清除网站数据，不要删除 PWA。manifest 和图标不变。
 
-数据只在当前来源/当前浏览器本地保存，不跨设备同步；域名、协议、端口或Safari/PWA入口不同可能使用不同存储空间。清除网站数据、隐私模式或系统回收可能丢失 localStorage，不能保证永久保存；建议定期复制反馈备份。升级会在你设备首次加载v0.2时迁移，开发环境测试不能直接读取你iPhone的真实数据。
+数据只在当前来源/当前浏览器本地保存，不跨设备同步；域名、协议、端口或Safari/PWA入口不同可能使用不同存储空间。清除网站数据、隐私模式或系统回收可能丢失 localStorage，不能保证永久保存；建议定期在数据诊断导出完整备份。升级会在你设备首次加载v0.2.1时迁移，开发环境测试不能直接读取你iPhone的真实数据。
 
 ## 验证
 
@@ -190,3 +190,33 @@ TEST_URL=http://localhost:8000 node tests/run.cjs
 ```
 
 测试使用隔离浏览器存储和样本记录。手机尺寸/键盘可用空间为模拟，实际 iPhone Safari/PWA 的系统键盘、安全区和安装需设备确认。
+
+
+## v0.2.1 数据诊断与备份恢复
+
+历史记录 → **数据诊断**：显示 origin、Safari/Browser/主屏幕环境、key是否存在、JSON UTF-8字节数、实际root keys、legacy sleep和Daily Status天数、标准化训练数量、A/B/C/D与Strength/Cardio统计、最早/最新日期、模板数量、未识别条目和同日重复候选。原始概览仅列键名、类型和数量，不自动展开私人训练内容。
+
+**导出全部数据** → **复制备份JSON**。这是只读操作，data 是当前 key 完整对象副本，包含未知字段和 legacy 数据：
+
+```json
+{
+  "schema": "haoxuan-training-log-backup",
+  "version": 1,
+  "exportedAt": "2026-09-07T12:00:00.000Z",
+  "origin": "https://example.github.io",
+  "environment": "standalone",
+  "data": {}
+}
+```
+
+`data:{}` 仅演示信封结构，导出时会包含完整真实对象。JSON损坏时改为“保留原始存储”，仍可复制原文；它不是有效标准备份，不能直接自动合并。
+
+**导入备份** → 粘贴 → 解析 → 验证/预览 → **确认合并**。只合并缺失数据：已有实际训练保留，实际训练胜过空计划，已有新每日状态字段优先，模板/其他根字段补缺。双方同日同类型均有实际数据则报告冲突并禁止整个导入，本轮没有逐组merge或强制覆盖。预览不写storage；确认时重新核对存储未变化。单份备份上限10MB；无法识别的训练结构不会冒险合并。
+
+历史识别不到时先看诊断，不要清除网站数据。Safari和主屏幕入口可能对应不同存储环境；在仍能看到旧记录的环境导出备份，再到目标环境预览合并。不要求删除PWA或清除Safari数据。没有旧storage或备份时无法自动重建真实历史：**无法确认自动恢复，需要通过数据诊断或备份恢复。**
+
+## 示例与导入体验
+
+导入弹窗提供“载入力量示例 / 载入有氧示例”，只填文本，不自动解析/导入。继续点击解析计划查看预览，再确认。两个 examples 文件本身都是严格、无BOM的UTF-8 JSON，格式schema仍为 haoxuan-training-plan / version 1。错误JSON显示可取得的position或行列信息；没有位置时提示复制完整JSON，不记录全文日志。
+
+导入入口独立留白，弹窗上限90dvh，固定关闭区与内部滚动区域配合可视视口；示例按钮、摘要卡、动作预览和确认区分别留出间距。现有训练/每日状态控件几何和manifest保持不变。
