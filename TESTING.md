@@ -1,3 +1,15 @@
+# v0.2.3 验证记录（2026-09-08）
+
+当前CACHE：**haoxuan-shell-v10**。新增 tests/v023.cjs，专项覆盖两引擎×两模式×五宽度：0横向overflow、0应用滤镜层、0额外顶部fixed层；文字组centerY偏差0px、标题/说明centerX偏差0px，card宽高与基线一致。只读viewport诊断随尺寸变化更新，数据fixture原文与统计不变。详见 [UI-AUDIT-v023.md](UI-AUDIT-v023.md)。
+
+测试入口以v023取代只适用旧DOM/top padding的v022专项测试；历史脚本保留。app.js/data-recovery.js仅UI模板插入，其余数据逻辑通过源码归一后hash校验不变。真实iOS状态栏合成与安装模式效果不能由模拟fixture证明。
+
+既有 tests/v021.cjs、v02.cjs、strength-regression.cjs 全部通过；tests/pwa-v021.cjs 已更新并通过 v10 缓存、pwa-ui.js缓存及离线示例检查。JS语法检查通过。
+
+以下为历史版本测试记录。
+
+---
+
 # v0.2.2 UI 验证记录（2026-09-07）
 
 当前 CACHE：**haoxuan-shell-v9**。本轮运行 `tests/v022.cjs` 与更新缓存期望值的 `tests/pwa-v021.cjs`，全部通过；数据实现未改，未重复运行整套迁移/导入测试。完整审计、五种 viewport 数值、安全区模拟和实机边界见 [UI-AUDIT-v022.md](UI-AUDIT-v022.md)。
