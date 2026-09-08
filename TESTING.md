@@ -1,3 +1,15 @@
+# v0.2.5 验证记录（2026-09-08）
+
+当前CACHE **haoxuan-shell-v12**。新增tests/v025.cjs和v0.2.4导航几何基线，删除无效guard专项tests/v024.cjs，更新run与缓存测试。两引擎×两模式×五宽度20个组合通过：0横向overflow、gap6px、group centerY与两个centerX偏差0px；三个SVG24×24px、stroke1.8px；nav/button高度及label位置与上版一致，comfort仍14px。
+
+动态safe-area和正文避让检查通过，状态/历史/诊断/导入弹窗正常，无JS异常，storage fixture原文不变。测量方法和字体到SVG的比例说明见 [UI-AUDIT-v025.md](UI-AUDIT-v025.md)。不再验证或尝试关闭系统顶部模糊，基础UI冻结。
+
+tests/v02.cjs、strength-regression.cjs 在两引擎全部通过；pwa-v021.cjs 的v12缓存与离线示例检查通过。数据模块、manifest和meta与本轮前逐字节一致。
+
+以下为历史记录；guard相关说明已经失效。
+
+---
+
 # v0.2.4 验证记录（2026-09-08）
 
 当前CACHE **haoxuan-shell-v11**。新增tests/v024.cjs，替换测试入口中的历史v023专项测试；保留旧脚本。Chromium/WebKit × 四种模式识别 × 五种宽度40个组合通过：browser guard隐藏，standalone/media-only/navigator-only guard满足top0、height1、全宽实色无滤镜；0意外横向overflow；gap10px；group centerY与两个centerX偏差均0px；card尺寸不变。

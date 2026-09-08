@@ -1,4 +1,4 @@
-# Haoxuan Training Log v0.2.4
+# Haoxuan Training Log v0.2.5
 
 原生 HTML / CSS / JavaScript，移动端优先的本地 PWA。无服务器后端、数据库、账号、AI 推断或外部请求。Workout 与 Daily Status 独立；训练计划通过本地 JSON 解析、预览、确认导入。
 
@@ -174,7 +174,7 @@ Safari 打开 HTTPS 网站 → 分享 → 添加到主屏幕。首次联网缓�
 
 ## PWA 更新和数据边界
 
-当前 CACHE：**haoxuan-shell-v11**。发布本目录完整应用文件，必须包含 storage-compat.js、data-recovery.js、pwa-ui.js 和 examples 两个 JSON。缓存包含全部应用脚本和两个示例；tests/README 不加入运行缓存。
+当前 CACHE：**haoxuan-shell-v12**。发布本目录完整应用文件，必须包含 storage-compat.js、data-recovery.js、pwa-ui.js 和 examples 两个 JSON。缓存包含全部应用脚本和两个示例；tests/README 不加入运行缓存。
 
 保持联网打开原来的 Safari/PWA 入口等待下载，再关闭该站点所有 Safari 标签页并划掉主屏幕 App，然后重开，使新 Worker 激活。不要清除网站数据，不要删除 PWA。manifest 和图标不变。
 
@@ -244,7 +244,7 @@ TEST_URL=http://localhost:8000 node tests/run.cjs
 详细配置表、测试结果和边界见 [UI-AUDIT-v023.md](UI-AUDIT-v023.md)。**顶部 blur 的真实 iPhone 视觉效果仍需实机确认。** 本轮没有修改status-bar-style，因此不要求重新安装；先联网更新现有PWA验证。如日后决定重新添加，先导出全部数据备份，不直接删除或清除网站数据。
 
 
-## v0.2.4：Standalone Scroll Edge Workaround
+## v0.2.4：Standalone Scroll Edge Workaround（历史；已在v0.2.5移除）
 
 viewport、status-bar-style、theme-color与manifest不变，不恢复cover、不添加body顶部safe-area padding。
 
@@ -255,3 +255,12 @@ Empty State gap从20px减至10px；group外边距对称补足原有高度，card
 UI Diagnostics新增guard active/inactive及rect、bottom inset、comfort、nav实际bottom padding。当前CACHE **haoxuan-shell-v11**。完整结果见 [UI-AUDIT-v024.md](UI-AUDIT-v024.md)。
 
 **已在项目中部署scroll-edge workaround，等待真实iPhone验收。** 只需联网更新现有PWA，不清storage、不删除或重新安装。模拟测试无法证明系统级scroll-edge blur已关闭。
+
+
+## v0.2.5：Final Mobile UI Polish — 基础 UI 冻结
+
+依据真实iPhone反馈，guard无效，已完整移除其DOM/CSS/启用逻辑/诊断和专项测试。保留其它PWA viewport诊断。顶部模糊作为当前iOS standalone系统视觉行为接受，不再增加workaround，也不改viewport/status-bar/顶部safe-area。
+
+Empty State gap最终6px，group仍上下居中且card几何不变。导航字符图标旧字号21px，现为统一24×24px、1.8px线宽SVG（名义尺寸+14.3%）；保留原图形含义、按钮/导航高度、标签位置及14px底部comfort。原字符仅作为不可见的字体行盒占位，避免导航高度因替换SVG变化。
+
+数据逻辑完全不变。当前CACHE **haoxuan-shell-v12**，无需清数据或重装PWA。详细测量与测试见 [UI-AUDIT-v025.md](UI-AUDIT-v025.md)。基础UI以v0.2.5冻结，今后仅根据明确新需求调整。

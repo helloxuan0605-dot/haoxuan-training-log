@@ -1,3 +1,5 @@
+> 历史记录：真实iPhone确认无效，以下guard及其专项测试已在v0.2.5删除；不再继续此workaround。
+
 # v0.2.4 — Standalone Scroll Edge Guard
 
 2026-09-08。只做可撤销的 UI / PWA workaround，不认定系统 scroll-edge effect 已是确认根因。
