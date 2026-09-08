@@ -1,5 +1,6 @@
 :root{
-  --bottom-nav-height:calc(72px + env(safe-area-inset-bottom));
+  --bottom-nav-comfort:14px;
+  --bottom-nav-height:calc(64px + max(env(safe-area-inset-bottom,0px),var(--bottom-nav-comfort)));
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans","Microsoft YaHei",sans-serif;
   color:#192d2a;
   background:#f3f5f4;
@@ -87,7 +88,7 @@ button:active{
 main{
   max-width:680px;
   margin:auto;
-  padding:8px 18px calc(var(--bottom-nav-height,calc(72px + env(safe-area-inset-bottom))) + 32px)}
+  padding:8px 18px calc(var(--bottom-nav-height,78px) + 32px)}
 h1{
   font-size:30px;
   letter-spacing:-1px;
@@ -294,7 +295,7 @@ progress::-moz-progress-bar{
   border-top:1px solid var(--line);
   /* Opaque paint avoids a fixed backdrop-filter compositor layer on iOS. */
   background:#fff;
-  padding:8px 16px calc(8px + env(safe-area-inset-bottom));
+  padding:8px 16px max(env(safe-area-inset-bottom,0px),var(--bottom-nav-comfort));
   z-index:5}
 .bottom-nav button{
   border:0;
@@ -354,10 +355,10 @@ dialog::backdrop{
   align-items:center;
   justify-content:center;
   text-align:center;
-  gap:20px;
-  /* Old paragraph margins totaled 28px. 20px gap + 4px on each edge
-     preserves the existing card height while centering the visible group. */
-  margin-block:4px}
+  gap:10px;
+  /* Keep the existing 28px spacing budget: 10px gap + 9px per edge.
+     The visible group stays centered and the card height stays unchanged. */
+  margin-block:9px}
 .empty-state-content > h3, .empty-state-content > p{
   width:100%;
   margin:0;
@@ -709,3 +710,25 @@ main{
  .example-actions { grid-template-columns:minmax(0,1fr); }
  #plan-json { min-height:180px; }
 }
+
+
+/* v0.2.4 experimental iOS scroll-edge guard: no flow spacing or blur. */
+#pwa-top-edge-guard {
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:1px;
+  background:#f3f5f4;
+  opacity:1;
+  filter:none;
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  pointer-events:none;
+  z-index:1000;
+}
+@media (display-mode:standalone) {
+  #pwa-top-edge-guard { display:block; }
+}
+html.pwa-standalone #pwa-top-edge-guard { display:block; }

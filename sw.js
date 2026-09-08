@@ -1,4 +1,4 @@
-const CACHE='haoxuan-shell-v10';
+const CACHE='haoxuan-shell-v11';
 const FILES=['./','./index.html','./styles.css','./app.js','./cardio.js','./daily-status.js','./plan-import.js','./storage-compat.js','./data-recovery.js','./pwa-ui.js','./examples/strength-plan.json','./examples/cardio-plan.json','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('haoxuan-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

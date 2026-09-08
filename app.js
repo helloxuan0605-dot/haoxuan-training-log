@@ -45,7 +45,7 @@ function syncNavigationHeight() {
   document.documentElement.style.setProperty('--bottom-nav-height', `${Math.ceil(bottomNav.getBoundingClientRect().height)}px`);
 }
 syncNavigationHeight();
-new ResizeObserver(syncNavigationHeight).observe(bottomNav);
+new ResizeObserver(syncNavigationHeight).observe(bottomNav, {box: 'border-box'});
 window.addEventListener('resize', syncNavigationHeight);
 window.visualViewport?.addEventListener('resize', () => {
   syncNavigationHeight();

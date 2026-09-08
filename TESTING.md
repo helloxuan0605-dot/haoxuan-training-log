@@ -1,3 +1,17 @@
+# v0.2.4 验证记录（2026-09-08）
+
+当前CACHE **haoxuan-shell-v11**。新增tests/v024.cjs，替换测试入口中的历史v023专项测试；保留旧脚本。Chromium/WebKit × 四种模式识别 × 五种宽度40个组合通过：browser guard隐藏，standalone/media-only/navigator-only guard满足top0、height1、全宽实色无滤镜；0意外横向overflow；gap10px；group centerY与两个centerX偏差均0px；card尺寸不变。
+
+动态safe-area 0/18/34px分别使用14/18/34px bottom padding，验证border-box导航高度、main+32、scroll-padding+24及末尾内容避让。数据fixture原文不变，数据源码哈希兼容检查通过。完整证据和实机边界见 [UI-AUDIT-v024.md](UI-AUDIT-v024.md)。
+
+原 tests/strength-regression.cjs 在 Chromium/WebKit 通过，tests/pwa-v021.cjs 已验证 v11 缓存及离线示例。五种宽度下分别补测0/18/34px安全区，展开动作的完成组/动作按钮及导入按钮均无遮挡。
+
+已在项目中加入scroll-edge workaround，等待真实iPhone验收；自动化只证明guard正确安装，不能证明系统blur关闭。
+
+以下为历史记录。
+
+---
+
 # v0.2.3 验证记录（2026-09-08）
 
 当前CACHE：**haoxuan-shell-v10**。新增 tests/v023.cjs，专项覆盖两引擎×两模式×五宽度：0横向overflow、0应用滤镜层、0额外顶部fixed层；文字组centerY偏差0px、标题/说明centerX偏差0px，card宽高与基线一致。只读viewport诊断随尺寸变化更新，数据fixture原文与统计不变。详见 [UI-AUDIT-v023.md](UI-AUDIT-v023.md)。
