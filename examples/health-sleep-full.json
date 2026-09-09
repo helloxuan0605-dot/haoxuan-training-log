@@ -1,0 +1,24 @@
+{
+  "schema": "haoxuan-health-sleep",
+  "version": 1,
+  "date": "2026-09-10",
+  "source": "apple-health-shortcuts",
+  "dataWindowStart": "2026-09-09T18:00:00+09:00",
+  "dataWindowEnd": "2026-09-10T12:00:00+09:00",
+  "sleep": {
+    "inBedStart": "2026-09-10T00:30:00+09:00",
+    "firstSleepStart": "2026-09-10T01:05:00+09:00",
+    "finalWakeTime": "2026-09-10T09:00:00+09:00",
+    "inBedMinutes": 510,
+    "totalSleepMinutes": 440,
+    "awakeMinutes": 25,
+    "awakeEpisodeCount": 2,
+    "remMinutes": 95,
+    "coreMinutes": 265,
+    "deepMinutes": 80,
+    "asleepUnspecifiedMinutes": 0
+  },
+  "sourceNames": [
+    "Apple Watch"
+  ]
+}

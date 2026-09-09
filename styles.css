@@ -727,3 +727,28 @@ main{
  .example-actions { grid-template-columns:minmax(0,1fr); }
  #plan-json { min-height:180px; }
 }
+
+/* v0.3: scoped sleep bridge; existing workout/nav/container geometry unchanged. */
+.health-entry { margin:16px 0 24px; }
+.health-entry p { margin:10px 0; }
+.health-card { background:#f3f5f4; border:1px solid var(--line, #dce3df); border-radius:16px; padding:16px; margin:0 0 24px; overflow-wrap:anywhere; }
+.health-card h3 { margin-top:0; }
+.health-metrics { margin:12px 0; }
+.health-metrics > div { display:flex; justify-content:space-between; gap:16px; padding:8px 0; }
+.health-metrics dt,.health-metrics dd { min-width:0; margin:0; }
+.health-metrics dd { text-align:right; font-weight:600; }
+.health-actions { display:grid; gap:12px; margin:20px 0 24px; }
+.health-guide-link { display:block; padding:12px 0; color:inherit; min-height:44px; }
+#health-manual textarea { margin:8px 0 20px; }
+#health-dialog button { min-height:48px; white-space:normal; }
+#health-dialog [hidden] { display:none; }
+#health-dialog #replace-health-fields[aria-pressed="true"] { background:#d6ff82; color:#142c28; }
+.health-comparison { padding:16px 0; border-bottom:1px solid #dce3df; }
+.health-comparison p { margin:8px 0; }
+#health-preview #replace-health-fields { margin-top:24px; }
+#health-error:empty { display:none; }
+#health-error { color:#963b25; overflow-wrap:anywhere; }
+.health-guide { padding-block:24px; overflow-wrap:anywhere; }
+.health-guide pre { overflow:auto; white-space:pre-wrap; word-break:break-word; }
+.health-guide li { margin-block:12px; }
+@media(max-width:360px) { #health-manual textarea { min-height:180px; } #health-dialog .preview-actions { grid-template-columns:1fr; } }

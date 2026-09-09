@@ -1,3 +1,35 @@
+# v0.3 验证记录（2026-09-09）
+
+当前 CACHE：**haoxuan-shell-v13**。测试仅使用隔离浏览器存储，不读取或改写真实 iPhone 的 localStorage。
+
+运行：先在项目目录启动 `python3 -m http.server 8000`，再执行 `TEST_URL=http://localhost:8000 node tests/run.cjs`。需要 Playwright 与已安装的 Chromium/WebKit；可用 NODE_PATH 指定已有运行时。
+
+新增 `tests/health-sleep.cjs`，在 Chromium、WebKit 分别检查：
+
+- 完整/简化/可选 null JSON、BOM/Markdown fence；schema/version/date/source、时间带时区及先后关系、分钟非负/上限、整数醒来次数、非 JSON、溢出到 Infinity 的数值拒绝。解析与失败不写 storage。
+- 阶段差异>30分钟和多来源提示，未知阶段显示 —，小时按分钟/60填入。
+- Fill Missing Only、已有值与0保护、明确替换仅五项客观字段、主观评分/备注/咖啡因/午睡保护。
+- 日期不一致明确预览、确认才写目标日；同日重导须确认；目标并发变更阻止保存，其他日期的并发变更保留。
+- Clipboard 不在打开时读取；成功解析、拒绝手动回退；延迟响应不能复活已关闭 sheet 或覆盖新的手动草稿。
+- Health 数据移除确认、保留客观字段；没有 Health 的旧状态摘要逐字不变，Health 段独立于 Workout。
+- 五种手机尺寸所有页面无横向 overflow（测试关闭 html/body 的横向裁切），睡眠 input 位于 card 内，Health card 和 sheet 不溢出，最后按钮可滚到导航上方。320px可视高度模拟键盘压缩后仍可关闭/解析/预览。
+
+| Viewport | Chromium | WebKit |
+|---|---|---|
+| 320×568 | 0 overflow / 通过 | 0 overflow / 通过 |
+| 375×667 | 0 overflow / 通过 | 0 overflow / 通过 |
+| 390×844 | 0 overflow / 通过 | 0 overflow / 通过 |
+| 393×852 | 0 overflow / 通过 | 0 overflow / 通过 |
+| 430×932 | 0 overflow / 通过 | 0 overflow / 通过 |
+
+现有 v025、v021、v02、strength-regression 套件继续验证基础 UI、Browser/Standalone 布局 fixture、旧 B/C/D、实际记录优先、迁移幂等、备份、计划导入、训练摘要与复制。v025 的原数据代码哈希检查仅规范化四处授权 Daily UI/summary 变更（入口、小时步长、夜醒上限、可选 Health 摘要段）；迁移及训练实现保持原哈希。无 JS pageerror。390px WebKit/Chromium 预览截图已人工检查。
+
+PWA 测试更新至 v13：新模块、两份 Sleep JSON、HTML/Markdown 教程均缓存；离线可解析睡眠示例与计划示例、可读设置教程，预览不创建本地记录。
+
+真实 iPhone 尚需验收：Shortcuts Sleep 读取权限、不同语言菜单、阶段/来源字段可用性、Dictionary/null 序列化、与 Health 原数据核对、实际剪贴板权限和系统键盘/PWA 行为。模拟 WebKit 通过不能代表这些步骤通过。本项目没有制作 .shortcut 文件，没有修改顶部系统 blur 行为。
+
+---
+
 # v0.2.5 验证记录（2026-09-08）
 
 当前CACHE **haoxuan-shell-v12**。新增tests/v025.cjs和v0.2.4导航几何基线，删除无效guard专项tests/v024.cjs，更新run与缓存测试。两引擎×两模式×五宽度20个组合通过：0横向overflow、gap6px、group centerY与两个centerX偏差0px；三个SVG24×24px、stroke1.8px；nav/button高度及label位置与上版一致，comfort仍14px。

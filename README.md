@@ -1,4 +1,4 @@
-# Haoxuan Training Log v0.2.5
+# Haoxuan Training Log v0.3
 
 原生 HTML / CSS / JavaScript，移动端优先的本地 PWA。无服务器后端、数据库、账号、AI 推断或外部请求。Workout 与 Daily Status 独立；训练计划通过本地 JSON 解析、预览、确认导入。
 
@@ -174,7 +174,7 @@ Safari 打开 HTTPS 网站 → 分享 → 添加到主屏幕。首次联网缓�
 
 ## PWA 更新和数据边界
 
-当前 CACHE：**haoxuan-shell-v12**。发布本目录完整应用文件，必须包含 storage-compat.js、data-recovery.js、pwa-ui.js 和 examples 两个 JSON。缓存包含全部应用脚本和两个示例；tests/README 不加入运行缓存。
+当前 CACHE：**haoxuan-shell-v13**。发布本目录完整应用文件，包含所有应用脚本、快捷指令教程和 examples 中四个 JSON。缓存包含全部运行脚本、教程及示例；tests/README 不加入运行缓存。
 
 保持联网打开原来的 Safari/PWA 入口等待下载，再关闭该站点所有 Safari 标签页并划掉主屏幕 App，然后重开，使新 Worker 激活。不要清除网站数据，不要删除 PWA。manifest 和图标不变。
 
@@ -263,4 +263,56 @@ UI Diagnostics新增guard active/inactive及rect、bottom inset、comfort、nav�
 
 Empty State gap最终6px，group仍上下居中且card几何不变。导航字符图标旧字号21px，现为统一24×24px、1.8px线宽SVG（名义尺寸+14.3%）；保留原图形含义、按钮/导航高度、标签位置及14px底部comfort。原字符仅作为不可见的字体行盒占位，避免导航高度因替换SVG变化。
 
-数据逻辑完全不变。当前CACHE **haoxuan-shell-v12**，无需清数据或重装PWA。详细测量与测试见 [UI-AUDIT-v025.md](UI-AUDIT-v025.md)。基础UI以v0.2.5冻结，今后仅根据明确新需求调整。
+该 UI 版本的数据逻辑完全不变。v0.2.5 当时的CACHE **haoxuan-shell-v12**，无需清数据或重装PWA。详细测量与测试见 [UI-AUDIT-v025.md](UI-AUDIT-v025.md)。基础UI以v0.2.5冻结，今后仅根据明确新需求调整。
+
+
+## v0.3 Apple Health Sleep Workflow
+
+1. Apple Watch / iPhone 完成睡眠记录。
+2. 运行自行建立的 **Haoxuan Sleep Export**。
+3. Shortcut 从 Apple Health 读取昨夜睡眠，生成 JSON 并复制到剪贴板。
+4. 打开 Training Log → 每日状态 → 从 Apple 健康导入睡眠 → 从剪贴板读取。
+5. 预览日期、数据来源和字段对照，确认导入。
+6. 晚上补起床精神、上午专注、下午专注、肌肉酸痛、训练意愿、整体困倦。
+7. 生成今日状态反馈并复制给 ChatGPT；第二天的训练计划由 ChatGPT 判断。
+
+[快捷指令完整设置指南](SHORTCUTS-APPLE-HEALTH.md) / [手机阅读版](shortcuts-apple-health.html)。需要手动创建，不提供可安装或签名的 .shortcut 文件。真实 Apple Health 权限由 Shortcuts 管理，PWA 无法直接读取 HealthKit；本项目没有新增服务器或上传健康数据。
+
+### Sleep Import schema v1
+
+独立于训练计划 schema：`schema: "haoxuan-health-sleep"`、`version: 1`、合法 `date: "YYYY-MM-DD"`（起床日）、`source: "apple-health-shortcuts"`、`sleep: object` 为必需。
+
+完整严格 JSON：[health-sleep-full.json](examples/health-sleep-full.json)。简化 JSON：[health-sleep-minimal.json](examples/health-sleep-minimal.json)。示例不能代替真实健康数据。
+
+`sleep` 可含以下字段，均可省略或为 null：
+
+- 时间：`inBedStart`、`firstSleepStart`、`finalWakeTime`。合法 ISO 8601，必须带 `±HH:mm` 或 `Z`，秒必需，可带1–3位毫秒。映射到输入框时使用其携带时区的 HH:mm，不随浏览器所在时区转换。
+- 分钟：`inBedMinutes`、`totalSleepMinutes`、`awakeMinutes`、`remMinutes`、`coreMinutes`、`deepMinutes`、`asleepUnspecifiedMinutes`。有限非负 number；总睡眠和四种阶段上限900分钟。卧床和清醒不额外限定上限。
+- `awakeEpisodeCount`：0–100整数。清醒分钟绝不当作醒来次数。
+- 根可选 `dataWindowStart`、`dataWindowEnd` 为同样的 ISO/null；`sourceNames` 为最多100个非空字符串（每个最长200字符）的数组，缺失默认空数组。
+
+起床必须晚于入睡，窗口结束必须晚于开始（两端都有时）。仅当四个阶段均已知且总睡眠已知时比较阶段和；差异超过30分钟仅提示，不拒绝。多个来源只提示，不去重、不排名。未知值显示 —，0保留为0。仅 JSON.parse，支持外层 Markdown fence、BOM 和首尾空白；不修正文、不执行粘贴内容。未知字段不会写入存储，未来字段需要明确的新实现。
+
+### healthSleep 持久结构与保护
+
+`dailyStatusByDate[date].healthSleep` 是可选增量字段，无需迁移。结构为：
+
+```text
+source, importedAt, sleepDate,
+inBedStart, firstSleepStart, finalWakeTime,
+inBedMinutes, totalSleepMinutes, awakeMinutes, awakeEpisodeCount,
+remMinutes, coreMinutes, deepMinutes, asleepUnspecifiedMinutes,
+sleepEfficiency, sourceNames, dataWindowStart, dataWindowEnd
+```
+
+只保留这些字段，不保存执行日志、HealthKit UUID、Apple ID 或设备序列号。所有缺失睡眠值规范化为 null。睡眠效率 = totalSleepMinutes / inBedMinutes × 100，仅在卧床>0且总睡眠已知时计算，不做质量或恢复评分。显示时分钟/效率四舍五入，原数值保留。
+
+确认后只映射：inBedStart → bedtime；firstSleepStart → sleepTime；finalWakeTime → wakeTime；totalSleepMinutes / 60 → estimatedSleepHours；awakeEpisodeCount → nightAwakenings。小时允许任意小数，避免分钟换算后被原0.1步长拒绝；夜醒输入上限同步为100，与 Sleep schema 一致。
+
+默认 Fill Missing Only，0也是已有值；高级替换默认关闭且只适用于上述五字段，null不会清空已有值。六项主观评分、备注、咖啡因、午睡永远不受 Health 导入影响。更改目标日期或已有 Health 数据必须在预览确认。确认前重新读取最新 storage，目标记录变化则阻止保存、要求重新预览；其他最新记录保持。解析、取消、失败都不写 storage。
+
+再次导入同一天，必须点击「使用新 Apple Health 数据替换」。移除需确认且只删除 healthSleep，保留之前自动填入的客观字段，避免误删后来手动修改。没有 healthSleep 时状态反馈保持原格式；有时只在每日状态反馈增加 Apple Health 段，训练反馈不变。
+
+剪贴板只在点击读取按钮后访问；权限拒绝/不可用会展开手动粘贴。全部内容留在当前 origin/浏览器的 localStorage，不保证永久保存，请继续使用全部数据备份。没有更改 localStorage key、Workout 数据模型、历史、训练计划导入或训练逻辑。
+
+v0.3 缓存为 **haoxuan-shell-v13**，包含睡眠模块、离线教程和两份示例；无需清除网站数据或重新安装 PWA。基础 UI 保持 v0.2.5 验收配置。
